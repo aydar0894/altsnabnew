@@ -1,0 +1,26 @@
+= render 'administrator_panel/sidebar'
+h1
+  | Характеристики
+table.uk-table.uk-table-striped
+  thead
+    tr
+      th
+        | Название
+      th
+        | Описание
+      th[colspan="3"]
+  tbody
+    - @fields&.each do |field|
+      tr
+        td
+          = field.name
+        td
+          = field.description
+        td
+          => link_to 'Показать', field
+          | /
+          =<> link_to 'Изменить', edit_field_path(field)
+          | /
+          =< link_to 'Удалить', field, method: :delete, data: { confirm: 'Вы уверены, что хотите удалить характеристику?' }
+br
+= link_to 'Создать характеристику', new_field_path

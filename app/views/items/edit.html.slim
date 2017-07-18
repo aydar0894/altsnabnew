@@ -1,0 +1,7 @@
+= render 'administrator_panel/sidebar'
+h1
+  | Изменение товара
+= render 'form', item: @item
+= link_to 'Показать', @item
+|  | 
+= link_to 'Назад', items_path

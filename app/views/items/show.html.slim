@@ -1,0 +1,39 @@
+.main.uk-container-small
+  .uk-grid
+    .uk-width-1-2
+      = image_tag @item.image.url(:high), width: '100%', alt: ''
+    .uk-width-1-2
+      h2 = @item.name
+      .uk-text-small
+        = @item.category.name
+      .item-description
+        = @item.description
+      .item-price
+        | от
+        =<> @item.price
+        | руб.
+      br
+      .fields
+        strong
+          | Характеристики:
+        br
+        - @field_values&.each do |field_value|
+          = "#{field_value.field&.name}: #{field_value.value}"
+          br
+      - if current_user&.is_admin?
+        = link_to 'Edit', edit_item_path(@item)
+      br      
+      #field
+        = form_for(@item, url: cart_add_item_with_subitems_path(@item.id), method: :post,  html: { multipart: true }) do |f|
+          = f.label :selected_subitems, "Доп. оборудование", class: "control-label"
+          div
+            = f.fields_for :selected_subitems do |subitem|               
+              = render 'selected_subitem_fields', f: subitem
+            .links
+              = link_to_add_association "Добавить поле".html_safe, f, :selected_subitems
+          button Добавить в корзину
+
+      - if current_user&.is_admin?
+        = link_to 'Edit', edit_item_path(@item)  
+
+      

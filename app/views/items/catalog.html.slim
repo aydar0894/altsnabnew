@@ -1,0 +1,90 @@
+.uk-grid.uk-grid-medium
+  aside
+    h3 Каталог продукции
+    ul.tm-list-category.uk-margin-remove uk-accordion=("multiple: true") 
+      - @head_categories.each_with_index do |cat, index|
+        - if cat.id == @side_opened_category_id || (@side_opened_category_id.nil? && index == 0)
+          li.uk-open
+            h4.uk-accordion-title = cat.name
+            .uk-accordion-content.uk-margin-remove
+              ul
+                - @child_categories[cat.id].each do |subcat| 
+                  li
+                    = link_to subcat.name, catalog_category_path(subcat.id)
+        - else
+          li
+            h4.uk-accordion-title = cat.name
+            .uk-accordion-content.uk-margin-remove
+              ul
+                - @child_categories[cat.id].each do |subcat| 
+                  li
+                    = link_to subcat.name, catalog_category_path(subcat.id)
+              ul                
+                = link_to 'Дополнительное оборудование', sub_catalog_category_path
+                    
+    ul.tm-list-leader.uk-list
+      li
+        a href="#" 
+          span.badge.new
+            i uk-icon=("icon: tag; ratio: 1") 
+          | Новинки
+      li
+        a href="#" 
+          span.badge.hit
+            i uk-icon=("icon: future; ratio: 0.8") 
+          | Под заказ
+      li
+        a href="#" 
+          span.badge.discount> %
+          | Скидки
+  .uk-width-expand
+    ul.uk-subnav.uk-subnav-pill.tm-product-swbutton uk-switcher="animation:uk-animation-fade;connect:.tm-product-switch" 
+      li
+        a href="#"  Новинки
+      li
+        a href="#"  Под заказ
+      li
+        a href="#"  Скидки
+    .uk-switcher.tm-product-switch.uk-margin
+      .uk-grid-small class="uk-child-width-1-4@l" uk-grid="" 
+        - @items.each do |item|
+          .product
+            .wrapper
+              = link_to item_path(item), class: 'image'
+                = image_tag item.image.url(:medium), height:'200', width: '280', alt: ''
+                .stars
+                  span
+                  span
+                  span
+                  span.grey
+                  span.grey
+                  | (3)
+              .info
+                = link_to item.name, item_path(item), class: 'href'
+                .introtext = item.description
+                .price
+                  | от
+                  span = item.price_formatted
+                  sup руб.
+                .icons.uk-child-width-1-3.uk-grid-collapse uk-grid="" 
+                  div
+                    img alt="Шасси" src="#{image_url 'awesome/02_shassi.svg'}" /
+                    span 6 x 4
+                  div
+                    img alt="Грузоподъемность" src="#{image_url 'awesome/02_weight.svg'}" /
+                    span 20 т.
+                  div
+                    img alt="Бензин" src="#{image_url 'awesome/02_benzin.svg'}" /
+                    span Евро 4
+                .buttons.uk-child-width-1-3.uk-grid-collapse uk-grid="" 
+                  = link_to cart_add_item_path(item), method: :post, class: 'uk-button', title: 'Добавить в Корзину'
+                    span.cart
+                  a.uk-button href="" title=("Добавить в Закладки") 
+                    span.heart
+                  a.uk-button href="" title=("Перейти к Товару") 
+                    span.goproduct
+        
+      div
+        | 2
+      div
+        | 3

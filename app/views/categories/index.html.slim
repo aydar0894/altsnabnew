@@ -1,0 +1,31 @@
+= render 'administrator_panel/sidebar'
+h1
+  | Категории
+table.uk-table.uk-table-striped
+  thead
+    tr
+      th
+        | Название
+      th
+        | Родительская категория
+      th
+        | Рабочая категория
+      th[colspan="3"]
+  tbody
+    - @categories&.each do |category|
+      tr
+        td
+          = category.name
+        td
+          = category.parent_category&.name
+        td
+          = category.is_leaf ? 'Да' : 'Нет'
+        td
+        
+          => link_to 'Показать', category
+          | /
+          =<> link_to 'Изменить', edit_category_path(category)
+          | /
+          =< link_to 'Удалить', category, method: :delete, data: { confirm: 'Вы уверены, что хотите удалить категорию?' }
+br
+= link_to 'Создать категорию', new_category_path

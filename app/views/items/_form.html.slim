@@ -1,0 +1,47 @@
+= render 'administrator_panel/sidebar'
+= form_for(item, html: { multipart: true }) do |f|
+  - if item.errors.any?
+    #error_explanation
+      h2
+        = pluralize(item.errors.count, "error")
+        |  prohibited this item from being saved:
+      ul
+        - item.errors.full_messages.each do |message|
+          li
+            = message
+  .field
+    = f.label :name
+    = f.text_field :name
+  .field
+    = f.label :description
+    = f.text_area :description
+  .field
+    = f.label :category_id
+    = f.select(:category_id, Category.all.select{ |t| t.is_leaf }.map{ |t| [t.name, t.id] }, {}, class: "form-control")
+  .field
+    = f.label :price
+    = f.number_field :price
+  .field
+    = f.label :image
+    - if item.image.present?
+      = image_tag item.image.url(:medium), height:'200', width: '280', alt: ''
+      br
+      |  (Текущая картинка)
+    - else
+      br
+      |  Картинка не установлена, будет использована стандартная
+      br
+    = f.file_field :image
+  
+  p
+    input#item-id-input [type="hidden" value="#{item.id ? item.id : 0}"]
+    strong
+      | Fields:
+    br
+    #fields
+      - @category_fields&.each do |category_field|
+        - @cfv = category_field.get_item_field(item.id)
+        input [name="item_field[#{category_field.id}]" value="#{@cfv&.value}"]
+        br
+  .actions
+    = f.submit

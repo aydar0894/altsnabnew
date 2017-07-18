@@ -1,0 +1,7 @@
+= render 'administrator_panel/sidebar'
+h1
+  | Изменение характеристики
+= render 'form', field: @field
+= link_to 'Показать', @field
+|  | 
+= link_to 'назад', fields_path
